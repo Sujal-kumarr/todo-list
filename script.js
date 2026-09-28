@@ -1,120 +1,82 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+const taskInput = document.getElementById("taskInput");
+const addButton = document.getElementById("addButton");
+const taskList = document.getElementById("taskList");
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
 
-    min-height: 100vh;
+// Add a new task
+addButton.addEventListener("click", addTask);
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.container {
-    width: 450px;
+// Allow pressing Enter to add a task
+taskInput.addEventListener("keypress", function (event) {
 
-    background-color: white;
+    if (event.key === "Enter") {
+        addTask();
+    }
 
-    padding: 30px;
+});
 
-    border-radius: 10px;
 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
+function addTask() {
 
-h1 {
-    text-align: center;
+    const taskText = taskInput.value.trim();
 
-    margin-bottom: 25px;
-}
+    // Don't add empty tasks
+    if (taskText === "") {
+        return;
+    }
 
-.input-section {
-    display: flex;
 
-    gap: 10px;
-}
+    // Create list item
+    const taskItem = document.createElement("li");
 
-#taskInput {
-    flex: 1;
+    taskItem.classList.add("task");
 
-    padding: 12px;
 
-    border: 1px solid #ccc;
+    // Create task text
+    const taskTextElement = document.createElement("span");
 
-    border-radius: 5px;
+    taskTextElement.classList.add("task-text");
 
-    font-size: 16px;
-}
+    taskTextElement.textContent = taskText;
 
-#addButton {
-    padding: 12px 20px;
 
-    border: none;
+    // Complete task when clicked
+    taskTextElement.addEventListener("click", function () {
 
-    border-radius: 5px;
+        taskTextElement.classList.toggle("completed");
 
-    background-color: #333;
+    });
 
-    color: white;
 
-    cursor: pointer;
-}
+    // Create delete button
+    const deleteButton = document.createElement("button");
 
-#addButton:hover {
-    background-color: #555;
-}
+    deleteButton.textContent = "Delete";
 
-#taskList {
-    list-style: none;
+    deleteButton.classList.add("delete-button");
 
-    margin-top: 25px;
-}
 
-.task {
-    display: flex;
+    // Delete task
+    deleteButton.addEventListener("click", function () {
 
-    justify-content: space-between;
+        taskItem.remove();
 
-    align-items: center;
+    });
 
-    padding: 12px;
 
-    margin-bottom: 10px;
+    // Add elements to task item
+    taskItem.appendChild(taskTextElement);
 
-    background-color: #f5f5f5;
+    taskItem.appendChild(deleteButton);
 
-    border-radius: 5px;
-}
 
-.task-text {
-    cursor: pointer;
-}
+    // Add task to list
+    taskList.appendChild(taskItem);
 
-.completed {
-    text-decoration: line-through;
 
-    color: gray;
-}
+    // Clear input
+    taskInput.value = "";
 
-.delete-button {
-    border: none;
-
-    background-color: #d9534f;
-
-    color: white;
-
-    padding: 6px 10px;
-
-    border-radius: 4px;
-
-    cursor: pointer;
-}
-
-.delete-button:hover {
-    background-color: #c9302c;
+    taskInput.focus();
 }
